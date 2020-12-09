@@ -1,2 +1,7 @@
-1.输入和输出都是相对的概念，输入流可以理解位向内存输入，输出流可以理解位从内存中输出
-2.
+1.输入和输出都是相对的概念，输入流可以理解位向内存输入，输出流可以理解位从内存中输出(内存角度)
+2.java io的数据源来源包括文件，管道，网络连接，内存缓存，system.in,system.out,system.error(java标准输入、输出、错误输出)
+3.字节输入流父类InputStream.java，字节输出流父类OutputStream.java,字符输入流父类位Reader.java,字符输出流父类位Writer.java
+4.文件流
+5.管道流要保证主线程不能close管道，操作管道时候保证读写管道线程都不退出,一个PipedOutputStream总是需要与一个PipedInputStream相关联。当这两种流联系起来时，它们就形成了一条管道.
+6.网络流
+7.ByteArrayInputStream和ByteArrayOutputStream
