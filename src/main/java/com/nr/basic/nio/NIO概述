@@ -1,5 +1,0 @@
-1.position、limit、capacity
-2.通道channel读，ByteBuffer相当于写，position移动，ByteBuffer的filp()方法，吧position移动置为0，limit置为原来的position位置
-  ，ByteBuffer的get方法读，position++，直到等于limit，调用clear方法，重置position位0，limit等于capacity，但是原来写的数据还在
-  下次继续读取channel剩下的内容，如果没有返回-1
-3.transferFrom和transferTo方法，transferTo方法count数量有Integer.MAX_VALUE的限制
