@@ -10,8 +10,10 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,10 +40,7 @@ public class MultiPortEcho {
     }
 
     private void go() throws IOException {
-        // Create a new selector
         Selector selector = Selector.open();
-        // Open a listener on each port, and register each one
-        // with the selector
         for (int i = 0; i < ports.length; ++i) {
             ServerSocketChannel ssc = ServerSocketChannel.open();
             ssc.configureBlocking(false);
@@ -58,22 +57,24 @@ public class MultiPortEcho {
             Iterator it = selectedKeys.iterator();
             while (it.hasNext()) {
                 SelectionKey key = (SelectionKey) it.next();
-                if ((key.readyOps() & SelectionKey.OP_ACCEPT)
-                        == SelectionKey.OP_ACCEPT) {
-                    // Accept the new connection
+                if (key.isValid() && key.isAcceptable()) {
+                    //在server socket channel接收到/准备好 一个新的 TCP连接后。
+                    //就会向程序返回一个新的socketChannel。<br>
+                    //但是这个新的socket channel并没有在selector“选择器/代理器”中注册，
+                    //所以程序还没法通过selector通知这个socket channel的事件。
+                    //于是我们拿到新的socket channel后，要做的第一个事情就是到selector“选择器/代理器”中注册这个
                     ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
                     SocketChannel sc = ssc.accept();
                     sc.configureBlocking(false);
-                    // Add the new connection to the selector
                     SelectionKey newKey = sc.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
+                    //这个已经处理的readyKey一定要移除。如果不移除，就会一直存在在selector.selectedKeys集合中
+                    //待到下一次selector.select() > 0时，这个readyKey又会被处理一次
                     it.remove();
                     System.out.println("Got connection from " + sc);
-                } else if ((key.readyOps() & SelectionKey.OP_READ)
-                        == SelectionKey.OP_READ) {
-                    // Read the data
+                } else if (key.isValid() && key.isReadable()) {
+                    //得到channel
                     SocketChannel sc = (SocketChannel) key.channel();
                     ByteBuffer echoBuffer = (ByteBuffer) key.attachment();
-                    // Echo data
                     StringBuilder message = new StringBuilder();
                     while (true) {
                         echoBuffer.clear();
@@ -113,6 +114,8 @@ public class MultiPortEcho {
                         it.remove();
                     }
                     selectedKeys.clear();
+                } else if (key.isValid() && key.isWritable()) {
+
                 }
             }
         }
