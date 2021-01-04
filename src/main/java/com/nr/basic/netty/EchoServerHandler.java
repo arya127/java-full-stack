@@ -16,6 +16,8 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf in = (ByteBuf) msg;
         System.out.println("server received:"+in.toString(CharsetUtil.UTF_8));
         in.clear();
+        Unpooled.buffer();
+        ByteBuf out = ctx.alloc().buffer();
         in.writeBytes("i am ok".getBytes());
         ctx.write(in);
     }
