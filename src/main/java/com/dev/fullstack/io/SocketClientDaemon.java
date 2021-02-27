@@ -1,4 +1,4 @@
-package com.nr.basic.io;
+package com.dev.fullstack.io;
 
 import java.util.concurrent.CountDownLatch;
 

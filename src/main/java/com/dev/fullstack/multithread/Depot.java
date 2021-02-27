@@ -1,4 +1,4 @@
-package com.nr.basic.multithread;
+package com.dev.fullstack.multithread;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;

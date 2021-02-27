@@ -1,4 +1,4 @@
-package com.nr.basic.multithread;
+package com.dev.fullstack.multithread;
 
 public class ReentrantLockDemo {
 

@@ -1,4 +1,4 @@
-package com.nr.basic.nio;
+package com.dev.fullstack.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

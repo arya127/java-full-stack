@@ -1,4 +1,4 @@
-package com.nr.basic.netty;
+package com.dev.fullstack.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
