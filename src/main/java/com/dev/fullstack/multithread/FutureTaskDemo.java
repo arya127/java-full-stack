@@ -1,7 +1,6 @@
 package com.dev.fullstack.multithread;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 public class FutureTaskDemo {
 
@@ -9,6 +8,8 @@ public class FutureTaskDemo {
 
     public void f(){
         FutureTask<Integer> futureTask = new FutureTask<>(new Task());
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        executor.submit(futureTask);
         Thread thread1 = new Thread(futureTask,"t1");
         //Thread thread2 = new Thread(futureTask,"t2");
         thread1.start();
@@ -46,7 +47,6 @@ public class FutureTaskDemo {
     }
 
     static class Task  implements Callable<Integer> {
-
         @Override
         public Integer call() throws Exception {
             System.out.println("Thread [" + Thread.currentThread().getName() + "] is running");

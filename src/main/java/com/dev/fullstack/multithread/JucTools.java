@@ -9,7 +9,6 @@ public class JucTools {
     private  CountDownLatch countDownLatch = new CountDownLatch(2);
     private  ExecutorService executorService = Executors.newFixedThreadPool(8);
 
-
     public void countDownLatch(){
         executorService.execute(() -> {
             try {
