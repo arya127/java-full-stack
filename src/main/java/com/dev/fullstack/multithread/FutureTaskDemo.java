@@ -6,28 +6,29 @@ public class FutureTaskDemo {
 
     private volatile WaitNode waiters = new WaitNode(2);
 
-    public void f(){
+    public void f() throws ExecutionException, InterruptedException {
         FutureTask<Integer> futureTask = new FutureTask<>(new Task());
         ExecutorService executor = Executors.newFixedThreadPool(2);
         executor.submit(futureTask);
-        Thread thread1 = new Thread(futureTask,"t1");
-        //Thread thread2 = new Thread(futureTask,"t2");
-        thread1.start();
-        //thread2.start();
-        new Thread(() -> {
-            try {
-                futureTask.get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        },"q1").start();
-        new Thread(() -> {
-            try {
-                futureTask.get();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        },"q2").start();
+//        Thread thread1 = new Thread(futureTask,"t1");
+//        thread1.start();
+        System.out.println(futureTask.get());
+        executor.shutdown();
+        //测试FutureTask的get方法阻塞性
+//        new Thread(() -> {
+//            try {
+//                futureTask.get();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        },"q1").start();
+//        new Thread(() -> {
+//            try {
+//                futureTask.get();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        },"q2").start();
     }
 
     public void f2(){
@@ -41,9 +42,9 @@ public class FutureTaskDemo {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         FutureTaskDemo demo = new FutureTaskDemo();
-        demo.f2();
+        demo.f();
     }
 
     static class Task  implements Callable<Integer> {
@@ -54,8 +55,7 @@ public class FutureTaskDemo {
             for(int i = 0; i < 100;++i) {
                 result += i;
             }
-
-            Thread.sleep(3000000000L);
+            Thread.sleep(3000L);
             return result;
         }
     }
